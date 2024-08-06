@@ -27,9 +27,8 @@ app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
   const mailOptions = {
-    from: process.env.EMAIL, // Set the authenticated sender's email address
-    to: process.env.EMAIL,   // Your own email address as the recipient
-    replyTo: email,          // Sender's email address
+    from: email,
+    to: process.env.EMAIL,
     subject: `Message from ${name}`,
     text: message,
   };
