@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = new express();
 
 app.use(bodyParser.json());
-// app.use(cors());
+app.use(cors());
 
 app.use(cors({
   origin: 'https://contact-gairik.netlify.app/' // Adjust this to match the origin of your frontend
