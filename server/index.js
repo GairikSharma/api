@@ -2,16 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
-require('dotenv').config();
+require("dotenv").config();
 
-const app = new express();
+const app = express();
+const port = process.env.PORT || 7000;
 
-app.use(bodyParser.json());
+// Configure CORS to allow requests from your frontend
 app.use(cors());
 
-app.use(cors({
-  origin: 'https://contact-gairik.netlify.app/' // Adjust this to match the origin of your frontend
-}));
+app.use(bodyParser.json());
+
+// Handle preflight requests
+app.options("*", cors());
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -22,24 +24,24 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send", async (req, res) => {
-    const { name, email, message } = req.body;
+  const { name, email, message } = req.body;
+
+  const mailOptions = {
+    from: email,
+    to: process.env.EMAIL,
+    subject: `Message from ${name}`,
+    text: message,
+  };
 
   try {
-    const mailOptions = {
-        from: email,
-        to: process.env.EMAIL,
-        subject: `Message from ${name}`,
-        text: message,
-    };
     await transporter.sendMail(mailOptions);
-    res.send(mailOptions);
     res.status(200).send("Message sent");
   } catch (error) {
-    res.status(500).send("Error occured", error);
+    console.error("Error sending email:", error);
+    res.status(500).send("Error occurred while sending email");
   }
 });
 
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
