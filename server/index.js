@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.get("/", () => {
+app.get("/", (req, res) => {
   res.send("This is mail sending api")
 })
 
