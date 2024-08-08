@@ -5,9 +5,9 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 7000;
+const port = process.env.PORT;
 
-// Configure CORS to allow requests from your frontend
+// CORS configuration
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -28,7 +28,7 @@ app.post("/send", async (req, res) => {
 
   const mailOptions = {
     from: process.env.EMAIL,
-    to: process.env.RECEIVER_EMAIL,
+    to: process.env.EMAIL,
     subject: `Message from ${name}`,
     text: message,
     replyTo: email,
